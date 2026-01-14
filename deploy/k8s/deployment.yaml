@@ -23,7 +23,7 @@ spec:
               apt-get update && \
               apt-get install -y {{ .Values.packages }} && \
               echo "Eseguo azioni con il file montato..." && \
-              wget -c https://github.com/ekristen/aws-nuke/releases/download/$AWS_NUKE_VERSION/aws-nuke-$AWS_NUKE_VERSION-linux-arm64.tar.gz -O - | tar -xz \
+              wget -c https://github.com/ekristen/aws-nuke/releases/download/{{ include "AWS_NUKE_VERSION" . }}/aws-nuke-{{ include "AWS_NUKE_VERSION" . }}-linux-arm64.tar.gz -O - | tar -xz \
               chmod +x aws-nuke\
               cat /etc/config/extra-config.yaml \
               aws-nuke run --config /etc/config/extra-config.yaml --no-alias-check --no-dry-run --force
