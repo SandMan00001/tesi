@@ -1,13 +1,88 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
- name: nginx-config
+ name: aws-nuke-config
  namespace: default
 data:
  index.html: |
-   <html>
-   <head><title>Hello from Argo</title></head>
-   <body>
-   <h1>Hello from Argo</h1>
-   </body>
-   </html>
+regions:
+  - eu-west-1
+  - global
+
+blocklist:
+  - "000000000000"
+
+bypass-alias-check-accounts:
+  - "079068844109"
+
+accounts:
+  "079068844109":
+    presets:
+      - protect-tagged
+      - nuke
+      - sso
+      - accessrole
+
+resource-types:
+  excludes:
+    # Evita cancellazioni "pericolose" / inutili
+    - S3Object
+    - DynamoDBTableItem
+
+    # IAM: lascia fuori oggetti che spesso causano casini o sono gestiti altrove
+    - IAMUserPolicy
+    - IAMUserAccessKey
+    - IAMUserLoginProfile
+    - IAMUserGroupMembership
+    - IAMUserMFADevice
+    - IAMGroupPolicyAttachment
+    - IAMGroupPolicy
+    - IAMGroupUserMembership
+    - IAMPolicyVersion
+    - IAMInstanceProfileRoleAttachment
+    - IAMInstanceProfile
+
+    # Evita self-nuke della pipeline (progetto) e CloudFront
+    - CodeBuildProject
+    - CloudFrontDistribution
+
+    # Log (CloudWatch Logs)
+    - CloudWatchLogsLogGroup
+    - CloudWatchLogsLogStream
+
+    - APIGatewayRestAPI
+presets:
+  protect-tagged:
+    filters:
+      __global__:
+        - property: tag:aws-nuke
+          value: "keep"
+
+  nuke:
+    filters:
+      CloudFormationStack:
+        - "beNuke-assumed-role"
+      IAMRole:
+        - "beNuke-assumed-role"
+      IAMRolePolicyAttachment:
+        - "beNuke-assumed-role -> AdministratorAccess"
+
+  sso:
+    filters:
+      IAMSAMLProvider:
+        - type: "regex"
+          value: "AWSSSO_.*_DO_NOT_DELETE"
+      IAMRole:
+        - type: "glob"
+          value: "AWSReservedSSO_*"
+      IAMRolePolicyAttachment:
+        - type: "glob"
+          value: "AWSReservedSSO_*"
+
+  accessrole:
+    filters:
+      IAMRole:
+        - "ROLE"
+      IAMRolePolicyAttachment:
+        - "ROLE*"
+
