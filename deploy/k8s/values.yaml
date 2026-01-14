@@ -1,0 +1,12 @@
+image:
+  repository: debian
+  tag: stable-slim
+  pullPolicy: IfNotPresent
+
+# Lista delle dipendenze da scaricare all'avvio
+packages: "wget curl ca-certificates"
+
+# Contenuto del file YAML nel repo che vuoi passare al container
+externalConfigData: |
+  key: value
+  action: "configurazione-da-altro-file"
