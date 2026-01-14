@@ -10,3 +10,6 @@ packages: "wget curl ca-certificates"
 externalConfigData: |
   key: value
   action: "configurazione-da-altro-file"
+
+appConfig:
+  softwareVersion: "v3.62.2"
