@@ -4,7 +4,7 @@ metadata:
  name: aws-nuke-config
  namespace: default
 data:
- index.html: |
+aws-nuke.yaml: |
 regions:
   - eu-west-1
   - global
