@@ -1,22 +1,14 @@
-replicaCount: 2
+# Configurazione globale per il sotto-chart "nginx"
+nginx:
+  image:
+    repository: bitnami/nginx
+    tag: 1.25.3-debian-11-r0
+  
+  service:
+    type: ClusterIP
+    port: 80
 
-image:
-  repository: nginx
-  tag: "latest"
-  pullPolicy: IfNotPresent
-
-service:
-  type: LoadBalancer
-  port: 80
-
-resources:
-  limits:
-    cpu: 200m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-
-env:
-  APP_NAME: "My Nginx App"
-  ENV: "production"
+  ingress:
+    enabled: true
+    path: /
+    pathType: ImplementationSpecific
