@@ -1,0 +1,15 @@
+nginx:
+  replicaCount: 3  # In produzione vogliamo alta affidabilità
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  ingress:
+    hostname: www.miosito.com
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
