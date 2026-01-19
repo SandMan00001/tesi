@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  labels:
+    app: {{ .Chart.Name }}
+data:
+  app.name: {{ .Values.config.appName | quote }}
+  debug.mode: {{ .Values.config.debugMode | quote }}
