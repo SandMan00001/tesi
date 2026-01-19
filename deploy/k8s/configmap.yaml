@@ -5,5 +5,5 @@ metadata:
   labels:
     app: {{ .Chart.Name }}
 data:
-  app.name: {{ .Values.config.appName | quote }}
-  debug.mode: {{ .Values.config.debugMode | quote }}
+  app.name: {{ .Values.env.APP_NAME | quote }}
+  environment: {{ .Values.env.ENV | quote }}
