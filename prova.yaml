@@ -6,6 +6,21 @@ spec:
   selector:
     matchLabels:
       app: nginx
+    # Liveness: Riavvia il container se /healthz non risponde con 200-399
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 80
+    initialDelaySeconds: 3 # Aspetta 3 secondi prima del primo controllo [6]
+    periodSeconds: 3       # Esegui il controllo ogni 3 secondi [7]
+
+    # Readiness: Non inviare traffico finché /ready non risponde
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 5
   replicas: 2 
   template:
     metadata:
