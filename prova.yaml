@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: linkwarden
-  namespace: linkwarden-ns
+  namespace: linkwarden
 spec:
   replicas: 1
   selector:
@@ -15,7 +15,7 @@ spec:
     spec:
       destination:
         server: https://kubernetes.default.svc
-        namespace: linkwarden-ns
+        namespace: linkwarden
       containers:
       - name: linkwarden
         image: ghcr.io/linkwarden/linkwarden:latest
@@ -28,8 +28,9 @@ spec:
             value: "http://localhost:3000" # Change to your domain later
         ports:
         - containerPort: 3000
-        syncOptions:
-        - CreateNamespace=true
+        SyncPolicy:
+          syncOptions:
+          - CreateNamespace=true
 ---
 apiVersion: v1
 kind: Service
