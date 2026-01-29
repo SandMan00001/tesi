@@ -17,7 +17,7 @@ spec:
         image: ghcr.io/linkwarden/linkwarden:latest
         env:
           - name: DATABASE_URL
-            value: "prova.postgres.database.azure.com"
+            value: "/subscriptions/8da69e6f-64ad-471e-b21a-1e499cd9d360/resourceGroups/aks/providers/Microsoft.DBforPostgreSQL/flexibleServers/prova"
           - name: NEXTAUTH_SECRET
             value: "something_very_random"
           - name: NEXTAUTH_URL
