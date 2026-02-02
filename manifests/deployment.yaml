@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Default
 metadata:
   name: linkwarden
   namespace: linkwarden-ns
