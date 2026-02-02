@@ -1,0 +1,35 @@
+# Spazio per il database Postgres
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi # Quanto spazio vuoi assegnare
+---
+# Spazio per l'indice di Meilisearch
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: meili-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Spazio per i dati di Linkwarden
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: linkwarden-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
