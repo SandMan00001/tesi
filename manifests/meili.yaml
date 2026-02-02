@@ -1,0 +1,60 @@
+# 1. IL DISCO (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: meili-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi # Spazio per gli indici di ricerca
+---
+# 2. IL PROCESSO (Deployment)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meilisearch
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meilisearch
+  template:
+    metadata:
+      labels:
+        app: meilisearch
+    spec:
+      containers:
+      - name: meilisearch
+        image: getmeili/meilisearch:v1.12.8
+        env:
+        - name: MEILI_MASTER_KEY
+          value: "una-chiave-molto-sicura" # Deve coincidere con quella in Linkwarden
+        - name: MEILI_NO_ANALYTICS
+          value: "true"
+        ports:
+        - containerPort: 7700
+        volumeMounts:
+        - name: meili-data
+          mountPath: /meili_data # Percorso dove Meilisearch salva i dati
+      volumes:
+      - name: meili-data
+        persistentVolumeClaim:
+          claimName: meili-pvc
+---
+# 3. IL PUNTO DI ACCESSO (Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: meilisearch # Questo nome sarà l'hostname usato da Linkwarden
+  namespace: default
+spec:
+  selector:
+    app: meilisearch
+  ports:
+    - protocol: TCP
+      port: 7700
+      targetPort: 7700
