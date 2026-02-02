@@ -1,19 +1,42 @@
-apiVersion: "acid.zalan.do/v1"
-kind: postgresql
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: postgresql
+  name: postgres-deployment
+  labels:
+    app: postgres
 spec:
-  volume:
-    size: 1Gi
-  numberOfInstances: 2
-  users:
-    zalando:  # database owner
-    - superuser
-    - createdb
-    foo_user: []  # role for application foo
-  databases:
-    foo: zalando  # dbname: owner
-  preparedDatabases:
-    bar: {}
-  postgresql:
-    version: "17"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      initContainers:
+      - name: init-postgres
+        image: busybox
+        command: ["sh", "-c", "rm -rf /var/lib/postgresql/data/*"]
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-vol
+      containers:
+      - name: postgres
+        image: postgres
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: dbname
+        - name: POSTGRES_USER
+          value: dbuser
+        - name: POSTGRES_PASSWORD
+          value: dbpassword  
+        volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-vol
+      volumes:
+        - name: postgres-vol
+          persistentVolumeClaim:
+            claimName: postgres-vol 
