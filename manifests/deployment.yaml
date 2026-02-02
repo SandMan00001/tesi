@@ -21,11 +21,3 @@ spec:
         env:
         - name: DATABASE_URL
           value: "postgresql://postgres:password@postgres:5432/postgres"
-        # Aggiungi qui le altre variabili dell'env_file
-        volumeMounts:
-        - name: linkwarden-data
-          mountPath: /data/data
-      volumes:
-      - name: linkwarden-data
-        persistentVolumeClaim:
-          claimName: linkwarden-pvc # Devi creare anche il PVC!
