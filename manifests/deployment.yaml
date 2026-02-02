@@ -1,30 +1,35 @@
-apiVersion: apps/v1
-kind: Deployment
+# Spazio per il database Postgres
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: linkwarden
-  namespace: default
+  name: postgres-pvc
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: linkwarden
-  template:
-    metadata:
-      labels:
-        app: linkwarden
-    spec:
-      containers:
-      - name: linkwarden
-        image: ghcr.io/linkwarden/linkwarden:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: DATABASE_URL
-          value: "postgresql://postgres:password@postgres:5432/postgres"
-        volumeMounts:
-        - name: linkwarden-data
-          mountPath: /data/data
-      volumes:
-      - name: linkwarden-data
-        persistentVolumeClaim:
-          claimName: linkwarden-pvc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi # Quanto spazio vuoi assegnare
+---
+# Spazio per l'indice di Meilisearch
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: meili-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Spazio per i dati di Linkwarden
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: linkwarden-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
