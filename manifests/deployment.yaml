@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkwarden
+  namespace: linkwarden-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkwarden
+  template:
+    metadata:
+      labels:
+        app: linkwarden
+    spec:
+      containers:
+      - name: linkwarden
+        image: ghcr.io/linkwarden/linkwarden:latest
+        ports:
+        - containerPort: 3000
+        env:
+        # Configura queste con i dati del tuo DB
+        - name: DATABASE_URL
+          value: "postgresql://postgres:password@postgres-db:5432/linkwarden"
+        - name: NEXTAUTH_URL
+          value: "http://localhost:3000"
+        - name: NEXTAUTH_SECRET
+          value: "scrivi-qui-una-stringa-molto-lunga-e-casuale"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: linkwarden-service
+  namespace: linkwarden-ns
+spec:
+  type: ClusterIP
+  selector:
+    app: linkwarden
+  ports:
+    - port: 80
+      targetPort: 3000
