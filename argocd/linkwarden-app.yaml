@@ -6,12 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/TUO-UTENTE/linkwarden-gitops.git'
+    repoURL: 'https://github.com/SandMan00001/tesi'
     targetRevision: HEAD
-    path: manifests           # Cartella dove stanno i file dell'app
+    path: manifests           
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: linkwarden-ns  # Namespace di destinazione nel cluster
+    namespace: default
   syncPolicy:
     automated:
       prune: true
