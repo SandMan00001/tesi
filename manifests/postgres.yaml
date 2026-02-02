@@ -9,9 +9,7 @@ spec:
       - name: postgres
         image: postgres:16-alpine
         volumeMounts:
-        - name: pg-storage        # Nome arbitrario del volume
-          mountPath: /var/lib/postgresql/data # Percorso interno al container
+        - name: pg-storage 
+          mountPath: /var/lib/postgresql/data
       volumes:
-      - name: pg-storage          # Deve corrispondere a volumeMounts.name
-        persistentVolumeClaim:
-          claimName: postgres-pvc # Deve corrispondere al metadata.name nel file PVC
+      - name: pg-storage 
