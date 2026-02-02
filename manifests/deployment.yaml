@@ -1,8 +1,8 @@
 apiVersion: apps/v1
-kind: default
+kind: Deploy
 metadata:
   name: linkwarden
-  namespace: linkwarden-ns
+  namespace: default
 spec:
   replicas: 1
   selector:
