@@ -8,10 +8,6 @@ spec:
   selector:
     matchLabels:
       app: linkwarden
-  ports:
-    - protocol: TCP
-      port: 80      
-      targetPort: 3000
   template:
     metadata:
       labels:
