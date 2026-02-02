@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkwarden
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/TUO-UTENTE/linkwarden-gitops.git'
+    targetRevision: HEAD
+    path: manifests           # Cartella dove stanno i file dell'app
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: linkwarden-ns  # Namespace di destinazione nel cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
