@@ -5,37 +5,31 @@ metadata:
   namespace: default
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: linkwarden
-  template:
-    metadata:
-      labels:
-        app: linkwarden
-    spec:
-      containers:
-      - name: linkwarden
-        image: ghcr.io/linkwarden/linkwarden:latest
-        ports:
-        - containerPort: 3000
-        env:
-        # Configura queste con i dati del tuo DB
-        - name: DATABASE_URL
-          value: "postgresql://postgres:password@postgres-db:5432/linkwarden"
-        - name: NEXTAUTH_URL
-          value: "http://localhost:3000"
-        - name: NEXTAUTH_SECRET
-          value: "scrivi-qui-una-stringa-molto-lunga-e-casuale"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: linkwarden-service
-  namespace: linkwarden-ns
-spec:
-  type: ClusterIP
-  selector:
-    app: linkwarden
-  ports:
-    - port: 80
-      targetPort: 3000
+services:
+  postgres:
+    image: postgres:16-alpine
+    env_file: .env
+    restart: always
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  linkwarden:
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+    restart: always
+    # build: . # uncomment to build from source
+    image: ghcr.io/linkwarden/linkwarden:latest # comment to build from source
+    ports:
+      - 3000:3000
+    volumes:
+      - ./data:/data/data
+    depends_on:
+      - postgres
+      - meilisearch
+  meilisearch:
+    image: getmeili/meilisearch:v1.12.8
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./meili_data:/meili_data
