@@ -20,4 +20,4 @@ spec:
         - containerPort: 3000
         env:
         - name: DATABASE_URL
-          value: "postgresql://postgres:password@postgres:5432/postgres"
+          value: "postgresql://postgres:password_segreta@postgres-service:5432/linkwarden"
