@@ -14,18 +14,30 @@ spec:
         app: linkwarden
     spec:
       containers:
-      - name: linkwarden
-        image: ghcr.io/linkwarden/linkwarden:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: DATABASE_URL
-          value: "postgresql://postgres:password@postgres:5432/postgres"
-        # Aggiungi qui le altre variabili dell'env_file
-        volumeMounts:
-        - name: linkwarden-data
-          mountPath: /data/data
-      volumes:
-      - name: linkwarden-data
-        persistentVolumeClaim:
-          claimName: linkwarden-pvc # Devi creare anche il PVC!
+        postgres:
+        image: postgres:16-alpine
+        env_file: .env
+        restart: always
+        volumes:
+          - ./pgdata:/var/lib/postgresql/data
+        linkwarden:
+          env_file: .env
+          environment:
+            - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+          restart: always
+          # build: . # uncomment to build from source
+          image: ghcr.io/linkwarden/linkwarden:latest # comment to build from source
+          ports:
+            - 3000:3000
+          volumes:
+            - ./data:/data/data
+          depends_on:
+            - postgres
+            - meilisearch
+        meilisearch:
+          image: getmeili/meilisearch:v1.12.8
+          restart: always
+          env_file:
+            - .env
+          volumes:
+            - ./meili_data:/meili_data
