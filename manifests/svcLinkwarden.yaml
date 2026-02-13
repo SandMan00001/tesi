@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: linkwarden
+    app.kubernetes.io/name: proxy
   ports:
   - name: http
     protocol: TCP
