@@ -7,8 +7,8 @@ spec:
   selector:
     app: linkwarden
   ports:
-  - name: name-of-service-port  
+  - name: http
     protocol: TCP
-    port: 3000
-    targetPort: web-svc
+    port: 8080       
+    targetPort: 3000  
   type: ClusterIP
