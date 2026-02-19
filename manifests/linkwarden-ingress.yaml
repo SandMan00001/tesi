@@ -14,5 +14,5 @@ spec:
             backend:
               service:
                 name: linkwarden-service
-                port: 3000
+                port:
                   number: 3000
