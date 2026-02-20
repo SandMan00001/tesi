@@ -13,5 +13,3 @@ spec:
             name: linkwarden-service
             port:
               number: 3000
-        path: /
-        pathType: Prefix
