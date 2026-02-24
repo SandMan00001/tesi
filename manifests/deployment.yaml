@@ -20,7 +20,7 @@ spec:
         - containerPort: 3000
         env:
         - name: DATABASE_URL
-          value: "postgresql://postgres:Camello24RosaIbiza@demodb.chcius8cy3f4.eu-west-1.rds.amazonaws.com:5432/linkwarden"
+          value: "postgresql://postgres:v$$4y(-PFDyeaL9[qZFI<3oUNY>U@demodb.chcius8cy3f4.eu-west-1.rds.amazonaws.com:5432/linkwarden"
         - name: NEXTAUTH_SECRET
           value: VSUdiVQnXEKxLk3zYQWc1ZDQArOVLk6M9hoFL/h4XEE=
         - name: NEXTAUTH_URL
