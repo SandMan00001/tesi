@@ -8,8 +8,6 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
-        pathType: Prefix
         backend:
           service:
             name: linkwarden-service
