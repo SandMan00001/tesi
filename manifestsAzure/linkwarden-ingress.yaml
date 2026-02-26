@@ -6,8 +6,7 @@ metadata:
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:
-  - host: linkwarden.tuodominio.it  # <--- Aggiungi un host anche fittizio per test
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix
