@@ -8,7 +8,7 @@ spec:
   rules:
   - http:
       paths:
-        backend:
+      - backend:
           service:
             name: linkwarden-service
             port:
